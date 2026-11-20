@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NexaWave · Télécoms 2G–5G, IA & simulateurs</title>
+<style>
+:root{--bg:#f3f6fb;--bg2:#e4ecf8;--card:rgba(255,255,255,.85);--tx:#101c2b;--mut:#51637a;--ac:#0077c8;--ac2:#7a3cff;--ac3:#e0197d;--bd:rgba(16,28,43,.16);--cv:0,119,200;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060b16;--bg2:#0c1626;--card:rgba(18,32,54,.75);--tx:#eaf1fb;--mut:#9fb2ca;--ac:#27d3ff;--ac2:#9b6bff;--ac3:#ff4fa3;--bd:rgba(160,190,230,.2);--cv:39,211,255}}
+:root[data-theme="dark"]{--bg:#060b16;--bg2:#0c1626;--card:rgba(18,32,54,.75);--tx:#eaf1fb;--mut:#9fb2ca;--ac:#27d3ff;--ac2:#9b6bff;--ac3:#ff4fa3;--bd:rgba(160,190,230,.2);--cv:39,211,255}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+#bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2),var(--ac3));z-index:20}
+nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:10;display:flex;align-items:center;gap:4px;padding:8px 14px;overflow-x:auto;backdrop-filter:blur(12px);background:var(--card);border-bottom:1px solid var(--bd)}
+nav a{color:var(--tx);text-decoration:none;padding:6px 11px;border-radius:8px;white-space:nowrap;font-size:14px}
+nav a:hover{color:var(--ac)}nav .lg{display:flex;align-items:center;gap:8px;font-weight:700;margin-right:8px}
+nav svg{width:28px;height:28px}
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:90px 20px 50px;overflow:hidden;
+background:radial-gradient(circle at 15% 25%,rgba(122,60,255,.45),transparent 45%),radial-gradient(circle at 85% 20%,rgba(224,25,125,.35),transparent 42%),radial-gradient(circle at 50% 95%,rgba(0,170,255,.4),transparent 50%),var(--bg)}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero div{position:relative;max-width:840px}
+.hero .big{width:96px;height:96px;margin-bottom:8px}
+.tag{display:inline-block;border:1px solid var(--ac);padding:4px 14px;border-radius:99px;font-size:13px;color:var(--ac);margin-bottom:16px;font-weight:600;letter-spacing:.04em}
+h1{font-size:clamp(36px,9vw,72px);line-height:1.05;margin:0 0 16px;font-weight:800;background:linear-gradient(110deg,var(--ac),var(--ac2) 50%,var(--ac3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--tx);opacity:.85;font-size:18px;margin:0 auto 26px;max-width:600px}
+.btn{display:inline-block;background:linear-gradient(110deg,var(--ac2),var(--ac3));color:#fff;text-decoration:none;padding:12px 26px;border-radius:12px;font:inherit;font-weight:700;border:0;cursor:pointer;margin:4px}
+.btn.o{background:transparent;border:2px solid var(--ac);color:var(--ac)}
+section{position:relative;padding:80px 20px;max-width:1000px;margin:0 auto}
+.band{max-width:none;background:linear-gradient(180deg,var(--bg),var(--bg2),var(--bg))}
+.band>.in{max-width:1000px;margin:auto}
+h2{font-size:clamp(26px,5vw,40px);margin:0 0 10px}
+.lead{color:var(--mut);max-width:660px;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:22px;backdrop-filter:blur(8px)}
+.card h3{margin:0 0 6px}.card p{margin:0;color:var(--mut);font-size:15px}
+.pill{display:inline-block;font-size:12px;padding:2px 10px;border-radius:99px;background:var(--ac2);color:#fff;margin-bottom:8px}
+.pill.s{background:var(--ac3)}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}.rv.on{opacity:1;transform:none}
+svg.core{width:100%;height:auto}
+.n rect{fill:var(--card);stroke:var(--ac);stroke-width:1.6;transition:.3s;cursor:pointer}
+.n text{fill:var(--tx);font:600 13px system-ui,sans-serif;text-anchor:middle;pointer-events:none}
+.n.on rect{fill:var(--ac2);stroke:var(--ac3);stroke-width:3}.n.on text{fill:#fff}
+.ln{stroke:var(--mut);stroke-width:1.4;opacity:.6}.bus{fill:rgba(122,60,255,.25);stroke:var(--ac2)}
+.bt{fill:var(--tx);font:600 12px system-ui;text-anchor:middle}
+#desc,#step{border:1px dashed var(--bd);border-radius:10px;padding:12px 14px;margin-top:12px;min-height:3.4em}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font:inherit;cursor:pointer;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px 20px;font-weight:600}
+.tab[aria-selected="true"]{background:linear-gradient(110deg,var(--ac2),var(--ac3));color:#fff;border-color:transparent}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:14px 0}
+.fact{border:1px solid var(--bd);border-radius:10px;padding:10px 12px}.fact b{display:block;font-size:12px;color:var(--ac);text-transform:uppercase}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0}
+.node{font:inherit;cursor:pointer;background:transparent;color:var(--tx);border:2px solid var(--ac);border-radius:10px;padding:8px 14px;font-weight:600}
+.node[aria-pressed="true"]{background:var(--ac);color:#07101c}.arrow{color:var(--mut)}
+.sim{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;align-items:start}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:10px}.res .fact b{color:var(--ac3)}
+.q{font-weight:700;font-size:20px}
+label{display:block;margin:12px 0 4px;font-weight:600;font-size:14px}
+input,textarea,select{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+input[type=range]{padding:0}
+.links a{display:block;border:1px solid var(--bd);background:var(--card);border-radius:14px;padding:16px;color:var(--tx);text-decoration:none}
+.links a:hover{border-color:var(--ac)}.links small{display:block;color:var(--mut)}
+footer{text-align:center;color:var(--mut);padding:30px;font-size:14px}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#27d3ff"/><stop offset=".55" stop-color="#9b6bff"/><stop offset="1" stop-color="#ff4fa3"/></linearGradient>
+<symbol id="logo" viewBox="0 0 100 100"><path d="M50 6 88 28v44L50 94 12 72V28z" fill="none" stroke="url(#g)" stroke-width="6" stroke-linejoin="round"/><circle cx="50" cy="56" r="7" fill="url(#g)"/><path d="M36 44a20 20 0 0 1 28 0M28 36a31 31 0 0 1 44 0" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/></symbol></defs></svg>
+<div id="bar"></div>
+<nav><span class="lg"><svg><use href="#logo"/></svg>NexaWave</span><a href="#coeur5g">Cœur 5G</a><a href="#innovation">Innovation</a><a href="#ia">IA</a><a href="#solutions">Solutions</a><a href="#reseaux">2G–5G</a><a href="#standards">3GPP</a><a href="#contact">Contact</a></nav>
+
+<header class="hero" id="top">
+<canvas id="c1"></canvas>
+<div>
+<svg class="big"><use href="#logo"/></svg><br>
+<span class="tag">TÉLÉCOMS · IT · IA · SIMULATEURS</span>
+<h1>NexaWave (Designed by Ayoub) : le réseau de demain, dès aujourd’hui</h1>
+<p>Architectures 2G à 5G, cœur 5G interactif, solutions d’IA et simulateurs pour comprendre et concevoir les réseaux mobiles.</p>
+<a class="btn" href="#coeur5g">Explorer le cœur 5G</a><a class="btn o" href="#solutions">Nos solutions</a>
+</div>
+</header>
+
+<section id="coeur5g">
+<h2 class="rv">Le cœur 5G en interaction</h2>
+<p class="lead rv">Cliquez sur une fonction réseau pour voir son rôle, ou lancez la simulation pas à pas de l’enregistrement d’un mobile.</p>
+<div class="card rv">
+<svg class="core" id="core" viewBox="0 0 720 360"></svg>
+<div id="desc">Cliquez sur un élément du réseau.</div>
+<div id="step">Simulation : enregistrement d’un mobile et ouverture d’une session de données.</div>
+<p style="margin:12px 0 0"><button class="btn" id="next">Étape suivante</button><button class="btn o" id="rst">Réinitialiser</button></p>
+</div>
+</section>
+
+<section id="innovation">
+<h2 class="rv">Innover dans l’IT</h2>
+<div class="grid">
+<div class="card rv"><h3>Cloud-native</h3><p>Fonctions réseau en conteneurs, déployées et mises à l’échelle automatiquement.</p></div>
+<div class="card rv"><h3>Edge computing</h3><p>Le calcul au plus près de l’utilisateur pour une latence de quelques millisecondes.</p></div>
+<div class="card rv"><h3>Open RAN & slicing</h3><p>Interfaces ouvertes et réseaux virtuels dédiés sur une même infrastructure.</p></div>
+</div>
+</section>
+
+<section class="band" id="ia"><div class="in">
+<h2 class="rv">L’IA au cœur du réseau</h2>
+<p class="lead rv">Prévision de trafic, économie d’énergie, détection de pannes : des réseaux plus autonomes.</p>
+<div class="card rv" style="height:280px;position:relative;padding:0;overflow:hidden"><canvas id="c2"></canvas></div>
+</div></section>
+
+<section id="solutions">
+<h2 class="rv">Nos solutions et simulateurs</h2>
+<div class="grid" style="margin-bottom:24px">
+<div class="card rv"><span class="pill s">Disponible</span><h3>Simulateur 2G · 3G · 4G · 5G</h3><p>Estimez la couverture et le débit selon la génération et la distance (ci-dessous).</p></div>
+<div class="card rv"><span class="pill s">Disponible</span><h3>Simulateur du cœur 5G</h3><p>Enregistrement d’un mobile pas à pas, en haut de page.</p></div>
+<div class="card rv"><span class="pill">Bientôt</span><h3>Dimensionnement de capacité</h3><p>Nombre d’abonnés, trafic et ressources radio nécessaires.</p></div>
+<div class="card rv"><span class="pill">Bientôt</span><h3>Optimisation par IA</h3><p>Prévision de charge et réglages radio automatiques.</p></div>
+</div>
+<div class="card rv"><h3 style="margin-top:0">Simulateur de couverture 2G–5G</h3>
+<div class="sim"><div>
+<label for="sg">Génération</label><select id="sg"><option>2G</option><option>3G</option><option>4G</option><option selected>5G</option></select>
+<label for="sd">Distance : <span id="dv"></span> km</label><input id="sd" type="range" min="0.1" max="10" step="0.1" value="1">
+<label for="sp">Puissance d’émission (dBm) : <span id="pv"></span></label><input id="sp" type="range" min="30" max="60" step="1" value="46">
+</div><div class="res" id="res"></div></div>
+<p style="color:var(--mut);font-size:13px;margin:12px 0 0">Modèle d’espace libre simplifié, à titre pédagogique : les valeurs réelles dépendent du terrain, des obstacles et de l’équipement.</p></div>
+</section>
+
+<section class="band" id="reseaux"><div class="in">
+<h2 class="rv">Architectures 2G · 3G · 4G · 5G</h2>
+<div class="card rv" style="margin-top:20px"><div class="tabs" id="tabs"></div><div id="gen"></div><div class="chain" id="chain"></div><div id="d2" style="border:1px dashed var(--bd);border-radius:10px;padding:12px 14px"></div></div>
+</div></section>
+
+<section id="standards">
+<h2 class="rv">Standards 3GPP</h2>
+<div class="grid links">
+<a class="rv" href="https://www.3gpp.org" target="_blank" rel="noopener"><b>3GPP.org</b><small>Site officiel du 3rd Generation Partnership Project</small></a>
+<a class="rv" href="https://www.3gpp.org/specifications-technologies" target="_blank" rel="noopener"><b>Spécifications</b><small>Séries, releases et documents techniques</small></a>
+<a class="rv" href="https://portal.3gpp.org" target="_blank" rel="noopener"><b>Portail 3GPP</b><small>Recherche de spécifications et de work items</small></a>
+</div>
+</section>
+
+<section id="contact">
+<h2 class="rv">Contact</h2>
+<div class="card rv"><form id="f">
+<label for="n">Nom</label><input id="n" required><label for="e">E-mail</label><input id="e" type="email" required>
+<label for="m">Message</label><textarea id="m" rows="5" required></textarea>
+<p><button class="btn" type="submit">Envoyer</button></p></form></div>
+</section>
+<footer>© NexaWave · Contenu à visée pédagogique</footer>
+
+<script>
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function net(cv,pts,lay){var x=cv.getContext("2d"),W,H,N=[],mx=-999,my=-999,P=[];
+function size(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;N=[];
+if(lay){[4,6,6,3].forEach(function(n,i){for(var j=0;j<n;j++)N.push({x:W*(i+1)/5,y:H*(j+1)/(n+1),l:i})})}
+else for(var i=0;i<pts;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5})}
+size();addEventListener("resize",size);
+cv.parentNode.addEventListener("pointermove",function(e){var r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});
+var rd=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function frame(){var c=css("--cv"),ed=[];x.clearRect(0,0,W,H);
+if(!lay)N.forEach(function(n){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;var d=Math.hypot(n.x-mx,n.y-my);if(d<110){n.x+=(n.x-mx)/d*1.5;n.y+=(n.y-my)/d*1.5}});
+for(var i=0;i<N.length;i++)for(var j=i+1;j<N.length;j++){var a=N[i],b=N[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(lay?b.l===a.l+1:d<130)ed.push([a,b,d])}
+ed.forEach(function(e){x.strokeStyle="rgba("+c+","+(lay?.3:Math.max(0,.6-e[2]/220))+")";x.beginPath();x.moveTo(e[0].x,e[0].y);x.lineTo(e[1].x,e[1].y);x.stroke()});
+if(lay){if(Math.random()<.12&&ed.length)P.push({e:ed[Math.floor(Math.random()*ed.length)],t:0});P=P.filter(function(p){p.t+=.02;var a=p.e[0],b=p.e[1];x.fillStyle="rgba("+c+",.95)";x.beginPath();x.arc(a.x+(b.x-a.x)*p.t,a.y+(b.y-a.y)*p.t,3,0,7);x.fill();return p.t<1})}
+N.forEach(function(n){x.fillStyle="rgba("+c+",.95)";x.beginPath();x.arc(n.x,n.y,lay?6:3,0,7);x.fill()});
+if(!rd)requestAnimationFrame(frame)}frame()}
+net(document.getElementById("c1"),80,false);net(document.getElementById("c2"),0,true);
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add("on")})},{threshold:.12});
+document.querySelectorAll(".rv").forEach(function(e,i){e.style.transitionDelay=(i%4)*80+"ms";io.observe(e)});
+addEventListener("scroll",function(){var h=document.documentElement;document.getElementById("bar").style.width=h.scrollTop/(h.scrollHeight-h.clientHeight)*100+"%"},{passive:true});
+/* Cœur 5G */
+var NF=[["AMF",40,30,"AMF : gère l’accès, la mobilité et l’enregistrement des mobiles (interface N1/N2)."],["SMF",150,30,"SMF : gère les sessions de données (PDU) et pilote l’UPF via N4."],["AUSF",260,30,"AUSF : serveur d’authentification des abonnés."],["UDM",370,30,"UDM : données et identités des abonnés (successeur du HSS)."],["PCF",480,30,"PCF : règles de politique et de qualité de service."],["NRF",590,30,"NRF : annuaire qui permet aux fonctions de se découvrir entre elles."],
+["UE",40,290,"UE : équipement utilisateur (smartphone, objet connecté)."],["gNB",190,290,"gNB : station de base 5G NR, relie le mobile au cœur de réseau."],["UPF",400,290,"UPF : plan usager, achemine le trafic de données (N3 vers le gNB, N6 vers Internet)."],["DN",580,290,"DN : réseau de données (Internet, réseau d’entreprise)."]];
+var P={};NF.forEach(function(n){P[n[0]]=n});
+var L=[["UE","gNB"],["gNB","UPF"],["UPF","DN"],["gNB","AMF"],["SMF","UPF"]];
+var s='<rect class="bus" x="30" y="100" width="660" height="26" rx="8"/><text class="bt" x="360" y="118">Bus de services (architecture SBA)</text>';
+["AMF","SMF","AUSF","UDM","PCF","NRF"].forEach(function(k){s+='<line class="ln" x1="'+(P[k][1]+45)+'" y1="64" x2="'+(P[k][1]+45)+'" y2="100"/>'});
+var l2="";L.forEach(function(p){var a=P[p[0]],b=P[p[1]];l2+='<line class="ln" x1="'+(a[1]+45)+'" y1="'+(a[2]+(a[2]>200?0:34))+'" x2="'+(b[1]+45)+'" y2="'+(b[2]+(b[2]>200?0:34))+'"/>'});
+s=l2+s;
+NF.forEach(function(n){s+='<g class="n" id="n'+n[0]+'"><rect x="'+n[1]+'" y="'+n[2]+'" width="90" height="'+(n[2]>200?44:34)+'" rx="9"/><text x="'+(n[1]+45)+'" y="'+(n[2]+(n[2]>200?27:22))+'">'+n[0]+'</text></g>'});
+s+='<text class="bt" x="360" y="190" style="opacity:.7">Plan de contrôle (en haut) · Plan usager (en bas)</text><text class="bt" x="120" y="205" style="opacity:.6">N1/N2</text>';
+document.getElementById("core").innerHTML=s;
+function clr(){document.querySelectorAll(".n").forEach(function(g){g.classList.remove("on")})}
+NF.forEach(function(n){document.getElementById("n"+n[0]).onclick=function(){clr();this.classList.add("on");document.getElementById("desc").textContent=n[3]}});
+var ST=[[["UE","gNB"],"1. Le mobile envoie sa demande d’enregistrement via le gNB."],[["gNB","AMF"],"2. Le gNB transmet la demande à l’AMF (interface N2)."],[["AMF","AUSF","UDM"],"3. L’AMF authentifie l’abonné avec l’AUSF et l’UDM."],[["AMF","PCF"],"4. Les politiques d’accès sont récupérées auprès du PCF."],[["AMF","NRF","SMF"],"5. L’AMF trouve un SMF grâce au NRF et demande une session de données (PDU)."],[["SMF","UPF"],"6. Le SMF configure l’UPF (interface N4)."],[["UE","gNB","UPF","DN"],"7. Session établie : les données circulent du mobile vers Internet."]],si=0;
+document.getElementById("next").onclick=function(){clr();ST[si][0].forEach(function(k){document.getElementById("n"+k).classList.add("on")});document.getElementById("step").textContent=ST[si][1];si=(si+1)%ST.length};
+document.getElementById("rst").onclick=function(){si=0;clr();document.getElementById("step").textContent="Simulation : enregistrement d’un mobile et ouverture d’une session de données."};
+/* Simulateur */
+var SG={"2G":[900,43,0.2],"3G":[2100,43,21],"4G":[1800,46,150],"5G":[3500,50,1000]};
+function sim(){var g=SG[sg.value],d=+sd.value;dv.textContent=d;pv.textContent=sp.value;
+var fs=32.44+20*Math.log10(d)+20*Math.log10(g[0]),rx=+sp.value-fs-10,q,f;
+if(rx>-85){q="Excellente";f=1}else if(rx>-100){q="Bonne";f=.5}else if(rx>-110){q="Faible";f=.12}else{q="Insuffisante";f=0}
+var db=g[2]*f;res.innerHTML='<div class="fact"><b>Fréquence</b>'+g[0]+' MHz</div><div class="fact"><b>Affaiblissement</b>'+fs.toFixed(1)+' dB</div><div class="fact"><b>Niveau reçu</b>'+rx.toFixed(1)+' dBm</div><div class="fact"><b>Qualité</b><span class="q">'+q+'</span></div><div class="fact" style="grid-column:1/-1"><b>Débit indicatif</b><span class="q">'+(db>=1?db.toFixed(0)+" Mbit/s":db>0?(db*1000).toFixed(0)+" kbit/s":"Pas de service")+'</span></div>'}
+["sg","sd","sp"].forEach(function(i){window[i]=document.getElementById(i);window[i].oninput=sim});window.res=document.getElementById("res");window.dv=document.getElementById("dv");window.pv=document.getElementById("pv");sim();
+/* 2G-5G */
+var G={"2G":{t:"2G (GSM)",rel:"GSM, années 1990",deb:"9,6–14,4 kbit/s (EDGE ~384)",acc:"TDMA/FDMA",net:[["MS","Terminal mobile."],["BTS","Station de base : liaison radio."],["BSC","Contrôle plusieurs BTS, handover."],["MSC/VLR","Commutation des appels et suivi des abonnés."],["HLR","Base de données des abonnés."]]},
+"3G":{t:"3G (UMTS)",rel:"3GPP Release 99+",deb:"384 kbit/s – ~42 Mbit/s",acc:"W-CDMA",net:[["UE","Équipement utilisateur."],["NodeB","Station de base 3G."],["RNC","Contrôleur radio."],["MSC / SGSN","Voix (circuit) et données (paquet)."],["GGSN","Passerelle vers Internet."],["HSS","Base de données des abonnés."]]},
+"4G":{t:"4G (LTE)",rel:"3GPP Release 8+",deb:"~150 Mbit/s – ~1 Gbit/s",acc:"OFDMA / SC-FDMA",net:[["UE","Équipement utilisateur."],["eNodeB","Station de base 4G."],["MME","Mobilité et authentification."],["SGW","Ancrage de la mobilité (plan usager)."],["PGW","Passerelle vers Internet."],["HSS","Base de données des abonnés."]]},
+"5G":{t:"5G (NR)",rel:"3GPP Release 15+",deb:"Plusieurs Gbit/s",acc:"OFDM flexible",net:[["UE","Équipement utilisateur."],["gNB","Station de base 5G NR."],["AMF","Accès et mobilité."],["SMF","Sessions de données."],["UPF","Plan usager."],["UDM","Données des abonnés."]]}},cur="4G",tabs=document.getElementById("tabs");
+Object.keys(G).forEach(function(k){var b=document.createElement("button");b.className="tab";b.textContent=k;b.dataset.k=k;b.onclick=function(){cur=k;rg()};tabs.appendChild(b)});
+function rg(){var g=G[cur],c=document.getElementById("chain");Array.prototype.forEach.call(tabs.children,function(b){b.setAttribute("aria-selected",b.dataset.k===cur)});
+document.getElementById("gen").innerHTML="<div class='facts'><div class='fact'><b>Génération</b>"+g.t+"</div><div class='fact'><b>Norme</b>"+g.rel+"</div><div class='fact'><b>Débit</b>"+g.deb+"</div><div class='fact'><b>Accès radio</b>"+g.acc+"</div></div>";c.innerHTML="";
+g.net.forEach(function(n,i){if(i){var a=document.createElement("span");a.className="arrow";a.textContent="→";c.appendChild(a)}var b=document.createElement("button");b.className="node";b.setAttribute("aria-pressed","false");b.textContent=n[0];b.onclick=function(){c.querySelectorAll(".node").forEach(function(o){o.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");document.getElementById("d2").textContent=n[0]+" : "+n[1]};c.appendChild(b)});
+document.getElementById("d2").textContent="Cliquez sur un élément pour voir son rôle."}rg();
+document.getElementById("f").onsubmit=function(ev){ev.preventDefault();location.href="mailto:contact@example.com?subject="+encodeURIComponent("Contact depuis le site NexaWave")+"&body="+encodeURIComponent(document.getElementById("m").value+"\n\n"+document.getElementById("n").value+" ("+document.getElementById("e").value+")")};
+</script>
+</body>
+</html>
